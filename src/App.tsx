@@ -16,7 +16,7 @@ const STAGE_INDEX_TO_COMPONENT_MAPPING: Record<
 };
 
 function App() {
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(1);
 
   const ScreenComponent = STAGE_INDEX_TO_COMPONENT_MAPPING[stepIndex];
 
