@@ -2,7 +2,13 @@ import { useState } from "react";
 
 import { MoreDetails, UserDetails, Verification, WorkDetails } from "./screens";
 
-const STAGE_INDEX_TO_COMPONENT_MAPPING: Record<number, React.FC> = {
+import "./App.css";
+import { CommonScreenAttributes } from "./types";
+
+const STAGE_INDEX_TO_COMPONENT_MAPPING: Record<
+  number,
+  React.FC<CommonScreenAttributes>
+> = {
   0: UserDetails,
   1: MoreDetails,
   2: WorkDetails,
@@ -14,9 +20,11 @@ function App() {
 
   const ScreenComponent = STAGE_INDEX_TO_COMPONENT_MAPPING[stepIndex];
 
+  const nextStep = () => setStepIndex((i) => (i + 1) % 4);
+
   return (
-    <div className="w-full h-full flex flex-row">
-      <ScreenComponent />
+    <div className="w-full h-full flex flex-col md:flex-row">
+      <ScreenComponent nextStep={nextStep} />
     </div>
   );
 }
