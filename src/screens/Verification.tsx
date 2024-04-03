@@ -105,9 +105,11 @@ const Verification: React.FC<CommonScreenAttributes> = ({ nextStep, data }) => {
             color="rgb(209, 213, 219)"
             className="h-6"
           />
-          <div className="w-10 rounded-full overflow-hidden aspect-square">
-            <img src={data["image"]} alt="Profile" />
-          </div>
+          {data["image"] && (
+            <div className="w-10 rounded-full overflow-hidden aspect-square">
+              <img src={data["image"]} alt="Profile" />
+            </div>
+          )}
           <div
             onClick={nextStep}
             className="text-white bg-pink-500 w-fit rounded-lg hover:bg-pink-400 px-4 py-3 font-semibold text-sm"
