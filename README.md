@@ -3,6 +3,7 @@
 ### Prepared by Rigan Burnwal
 
 Netlify Live Deployment Link: [https://main--tiny-yeot-7ec500.netlify.app/](https://main--tiny-yeot-7ec500.netlify.app/)
+Vercel Deployment Link: [https://aeonaxy-dribbble.vercel.app/](https://aeonaxy-dribbble.vercel.app/)
 
 Notes:
 
