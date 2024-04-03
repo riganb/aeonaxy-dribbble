@@ -1,11 +1,20 @@
-import left_bg from "../res/left-backgroud.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import left_bg from "../res/left-background.png";
 import { CommonScreenAttributes } from "../types";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
-const UserDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
+const UserDetails: React.FC<CommonScreenAttributes> = ({
+  nextStep,
+  data,
+  updatePropValue,
+}) => {
+  const usernameTaken =
+    data["username"] === "Rigan" || data["username"] === "Aeonaxy";
+
   return (
     <>
       <div className="w-full md:w-1/3 md:h-full flex flex-col md:justify-around p-10 gap-5 bg-[#f2d184]">
-        <div className="text-[#aa853e] text-xl">dribbble</div>
+        <div className="text-[#aa853e] text-4xl font-cookie">dribbble</div>
         <div className="text-[#846014] font-[700] text-2xl">
           Discover the world's top
           <br />
@@ -31,20 +40,39 @@ const UserDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
         </div>
         <div className="flex flex-col w-full md:w-1/2 gap-5 md:h-full md:justify-between">
           <div className="text-2xl font-bold">Sign up to Dribbble</div>
-          <div className="text-red-700">* Username has already been taken</div>
+          {usernameTaken && (
+            <div className="text-red-700">
+              * Username has already been taken
+            </div>
+          )}
           <div className="w-full flex flex-row gap-3">
             <div className="flex-1">
               <div className="font-bold">Name</div>
               <input
                 type="text"
                 className="outline-none bg-gray-100 rounded-md p-2 mt-2 w-full"
+                onChange={(e) => updatePropValue("name")(e.target.value)}
               />
             </div>
             <div className="flex-1">
-              <div className="font-bold">Username</div>
+              <div className="font-bold">
+                {usernameTaken && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faWarning}
+                      color="rgb(239, 68, 68)"
+                      className="pr-2"
+                    />
+                  </span>
+                )}
+                Username
+              </div>
               <input
                 type="text"
-                className="outline-none bg-gray-100 rounded-md p-2 mt-2 w-full"
+                className={`outline-none bg-gray-100 rounded-md p-2 mt-2 w-full ${
+                  usernameTaken ? "bg-red-50 text-red-500" : ""
+                }`}
+                onChange={(e) => updatePropValue("username")(e.target.value)}
               />
             </div>
           </div>
@@ -53,6 +81,7 @@ const UserDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
             <input
               type="text"
               className="outline-none w-full bg-gray-100 rounded-md p-2 mt-2"
+              onChange={(e) => updatePropValue("email")(e.target.value)}
             />
           </div>
           <div className="w-full">
@@ -61,11 +90,17 @@ const UserDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
               type="password"
               className="outline-none w-full bg-gray-100 rounded-md p-2 mt-2"
               placeholder="6+ characters"
+              onChange={(e) => updatePropValue("password")(e.target.value)}
             />
           </div>
           <div className="w-full flex flex-row gap-2 items-start">
             <div className="pl-1 pt-[1px]">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={data["terms"]}
+                onChange={() => updatePropValue("terms")(!data["terms"])}
+                className="accent-pink-500"
+              />
             </div>
             <div className="text-gray-700 text-sm w-4/5">
               Creating an account means you're okay with our
@@ -78,7 +113,10 @@ const UserDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
               </span>
             </div>
           </div>
-          <div className="text-white bg-pink-500 w-fit rounded-lg hover:bg-pink-400 px-7 py-2 font-semibold">
+          <div
+            onClick={nextStep}
+            className="text-white bg-pink-500 w-fit rounded-lg hover:bg-pink-400 px-7 py-2 font-semibold"
+          >
             Create Account
           </div>
           <div className="text-[10px] text-gray-400">

@@ -29,11 +29,13 @@ const OPTIONS_TO_DATA_MAPPING: Record<
 type OptionsCardAttributes = {
   type: OptionsEnum;
   selected: boolean;
+  onSelect: () => void;
 };
 
-const OptionsCard = ({ type, selected }: OptionsCardAttributes) => {
+const OptionsCard = ({ type, selected, onSelect }: OptionsCardAttributes) => {
   return (
     <div
+      onClick={onSelect}
       className={`px-5 pb-4 flex flex-col gap-1 justify-center items-center border-2 border-gray-200 rounded-xl ${
         selected ? "border-pink-500" : ""
       }`}
@@ -64,7 +66,7 @@ const OptionsCard = ({ type, selected }: OptionsCardAttributes) => {
       <input
         type="checkbox"
         className={`rounded-full w-5 h-5 accent-pink-500 ${
-          selected ? "-translate-y-5" : ""
+          selected ? "-translate-y-5" : "mt-3"
         }`}
         checked={selected}
       />
@@ -72,11 +74,36 @@ const OptionsCard = ({ type, selected }: OptionsCardAttributes) => {
   );
 };
 
-const WorkDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
+const WorkDetails: React.FC<CommonScreenAttributes> = ({
+  nextStep,
+  data,
+  updatePropValue,
+}) => {
+  const updateSelection = (type: OptionsEnum) => () => {
+    if (!data.occupations) return;
+
+    const values = data["occupations"];
+
+    const index = values.indexOf(type);
+
+    if (index === -1) {
+      updatePropValue("occupations")([...values, type]);
+    } else {
+      const updatedValues = [...values];
+      updatedValues.splice(index, 1);
+      updatePropValue("occupations")(updatedValues);
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col h-full py-5 md:py-10 md:px-5 items-center gap-7 px-4">
-      <div className="text-[#e84d8e] text-xl w-full">dribbble</div>
-      <div className="w-full flex flex-col justify-between h-full items-center">
+      <div className="text-[#e84d8e] text-4xl w-full font-cookie">
+        dribbble{" "}
+        <span className="font-poppins bg-gray-100 text-gray-500 ml-4 text-2xl px-4 py-1 rounded-lg">
+          &lt;
+        </span>
+      </div>
+      <div className="w-full flex flex-col justify-between h-full items-center gap-5 md:gap-0">
         <div className="font-bold text-3xl">What brings you to Dribbble?</div>
         <div className="text-gray-500">
           Select the options that best describe you. Don't worry, you can
@@ -88,11 +115,19 @@ const WorkDetails: React.FC<CommonScreenAttributes> = ({ nextStep }) => {
             OptionsEnum.Recruiter,
             OptionsEnum.Learner,
           ].map((type) => (
-            <OptionsCard key={type} type={type} selected={true} />
+            <OptionsCard
+              key={type}
+              type={type}
+              selected={!!data["occupations"]?.find((t) => t === type)}
+              onSelect={updateSelection(type)}
+            />
           ))}
         </div>
         <div className="font-bold">Anything else? You can select multiple</div>
-        <div className="text-white bg-pink-500 w-fit rounded-lg hover:bg-pink-400 px-24 py-2 font-semibold">
+        <div
+          onClick={nextStep}
+          className="text-white bg-pink-500 w-fit rounded-lg hover:bg-pink-400 px-24 py-2 font-semibold"
+        >
           Finish
         </div>
         <div className="font-bold text-sm text-gray-400">or Press RETURN</div>
